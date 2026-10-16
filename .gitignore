@@ -1,0 +1,5 @@
+.claude/
+CLAUDE.md
+
+# Project documentation never enters the published branch
+.output/
