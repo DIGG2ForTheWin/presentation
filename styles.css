@@ -1,4 +1,22 @@
-/* Theme tokens, fluid stage, base state and theme backdrop. */
+/* Theme tokens, fluid stage and base state. */
+
+/* Starting values; the theme review tunes them (NFR-002). The background stays plain; the smoke is on the elements. */
+:root {
+  --bg: #0b0d12;
+  --ink: #e6e9ef;
+  --font: system-ui, sans-serif;
+  --text-size: max(1rem, 3cqmin); /* resolves where used, so on .scene it measures the stage; 1rem floor for small windows (NFR-007) */
+}
+
+/* Fills the viewport at any shape with no script; scenes size themselves against it in cq units (ADR-008, ADR-013). */
+#stage {
+  position: fixed;
+  inset: 0;
+  container-type: size;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+}
 
 /* Every scene starts hidden in the same box; part hand-overs bring them in and out (ADR-006). */
 .scene {
@@ -6,4 +24,7 @@
   inset: 0;
   opacity: 0;
   visibility: hidden;
+  font-size: var(--text-size);
+  /* ponytail: one filter over the whole scene, in px, so smoke doesn't scale with the screen; move it to per-element if the rehearsal machine stutters */
+  filter: url(#smoke);
 }
