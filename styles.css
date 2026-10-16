@@ -1,1 +1,9 @@
 /* Theme tokens, fluid stage, base state and theme backdrop. */
+
+/* Every scene starts hidden in the same box; part hand-overs bring them in and out (ADR-006). */
+.scene {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+}

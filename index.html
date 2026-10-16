@@ -4,6 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>DIGG final presentation</title>
+  <script>
+    // Startup errors, including a broken or missing module, show on the page (ADR-009). After load they stay in the console.
+    function showError(e) {
+      const where = e.filename || e.target.src || e.target.href;
+      document.getElementById("stage").textContent = (e.message || "Failed to load") + (where ? " (" + where + ")" : "");
+    }
+    addEventListener("error", showError, true);
+    addEventListener("load", () => removeEventListener("error", showError, true));
+  </script>
   <link rel="stylesheet" href="styles.css">
   <script type="module" src="src/main.js"></script>
 </head>
