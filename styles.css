@@ -4,6 +4,8 @@
 :root {
   --bg: #0b0d12;
   --ink: #e6e9ef;
+  --route: #9cc9dc; /* SDK and what travels safely on it */
+  --limit: #e8a64a; /* the 30 MB wall, the only warm colour */
   --font: system-ui, sans-serif;
   --text-size: max(1rem, 3cqmin); /* resolves where used, so on .scene it measures the stage; 1rem floor for small windows (NFR-007) */
 }

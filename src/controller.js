@@ -47,6 +47,13 @@ export function start(steps) {
 
   document.addEventListener("keydown", (e) => {
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    if (e.key === "Home") {
+      // Instant reset to the start, nothing shown on the way: drops every animation, so the base state returns.
+      e.preventDefault();
+      active = null;
+      for (const anims of held.splice(0)) for (const a of anims) a.cancel();
+      return;
+    }
     if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
     e.preventDefault();
     if (active) return settle(active);

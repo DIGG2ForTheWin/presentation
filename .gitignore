@@ -3,3 +3,6 @@ CLAUDE.md
 
 # Project documentation never enters the published branch
 .output/
+
+# Downloaded Domibus source for research, never published
+.domibus/

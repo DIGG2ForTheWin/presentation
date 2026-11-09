@@ -1,5 +1,6 @@
 // Part order and startup.
 import { start } from "./controller.js";
+import content from "../content.js";
 import act1 from "./parts/act1-today.js";
 import act2 from "./parts/act2-testing.js";
 import act3 from "./parts/act3-poc.js";
@@ -18,6 +19,21 @@ import recommendations from "./parts/recommendations.js";
 const parts = [act1, act2, act3, comparison, recommendations];
 
 const handOver = { duration: 600, easing: "ease-in-out" }; // look to be confirmed by the team (FR-001)
+
+// Smoke strength: starts at content.js's value and scales how visible both hazes in index.html's #smoke filter are.
+// + / - change it by 0.1 live, with nothing shown; a reload goes back to content.js's value.
+const hazes = [...document.querySelectorAll("#smoke feFuncA")].map((f) => [f, Number(f.getAttribute("slope"))]);
+let smoke = content.smoke;
+const setSmoke = (v) => {
+  smoke = Math.max(0, Math.round(v * 10) / 10);
+  for (const [f, base] of hazes) f.setAttribute("slope", base * smoke);
+};
+setSmoke(smoke);
+document.addEventListener("keydown", (e) => {
+  if (e.altKey || e.ctrlKey || e.metaKey) return;
+  if (e.key === "+" || e.key === "=") setSmoke(smoke + 0.1);
+  else if (e.key === "-" || e.key === "_") setSmoke(smoke - 0.1);
+});
 
 const stage = document.getElementById("stage");
 const steps = [];
