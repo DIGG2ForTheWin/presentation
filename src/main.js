@@ -20,13 +20,21 @@ const parts = [act1, act2, act3, comparison, recommendations];
 
 const handOver = { duration: 600, easing: "ease-in-out" }; // look to be confirmed by the team (FR-001)
 
-// Smoke strength: starts at content.js's value and scales how visible both hazes in index.html's #smoke filter are.
+// Smoke strength: starts at content.js's value and scales the whole of index.html's #smoke filter:
+// how far the haze spreads (blur), swirls (displacement) and rises (offset), and how visible it is (alpha).
 // + / - change it by 0.1 live, with nothing shown; a reload goes back to content.js's value.
-const hazes = [...document.querySelectorAll("#smoke feFuncA")].map((f) => [f, Number(f.getAttribute("slope"))]);
+const knobs = [
+  ["feGaussianBlur", "stdDeviation"],
+  ["feDisplacementMap", "scale"],
+  ["feOffset", "dy"],
+  ["feFuncA", "slope"],
+].flatMap(([tag, attr]) =>
+  [...document.querySelectorAll(`#smoke ${tag}`)].map((el) => [el, attr, Number(el.getAttribute(attr))]),
+);
 let smoke = content.smoke;
 const setSmoke = (v) => {
   smoke = Math.max(0, Math.round(v * 10) / 10);
-  for (const [f, base] of hazes) f.setAttribute("slope", base * smoke);
+  for (const [el, attr, base] of knobs) el.setAttribute(attr, base * smoke);
 };
 setSmoke(smoke);
 document.addEventListener("keydown", (e) => {
@@ -37,7 +45,28 @@ document.addEventListener("keydown", (e) => {
 
 const stage = document.getElementById("stage");
 const steps = [];
-let shown = null; // scene of the last part that had steps
+// The title on screen before the first →; Act 1's hand-over fades it out like any part change, and ← or Home bring it back.
+const title = document.createElement("div");
+title.className = "scene title";
+title.innerHTML = `<svg viewBox="0 0 1600 900"><text x="800" y="450"></text></svg>`;
+stage.append(title);
+const titles = ["DIGG", "DOMIBUS"];
+const titleText = title.querySelector("text");
+// Shows one of the two wordmarks, shrunk to fit if it is wider than the screen allows (DOMIBUS is).
+const setTitle = (word) => {
+  titleText.textContent = word;
+  title.querySelector("svg").setAttribute("aria-label", word);
+  titleText.style.fontSize = "";
+  const width = titleText.getComputedTextLength();
+  if (width > 1400) titleText.style.fontSize = `${(parseFloat(getComputedStyle(titleText).fontSize) * 1400) / width}px`;
+};
+setTitle(content.title);
+// T switches between the two, with nothing else shown.
+document.addEventListener("keydown", (e) => {
+  if (e.altKey || e.ctrlKey || e.metaKey || e.key.toLowerCase() !== "t") return;
+  setTitle(titles[(titles.indexOf(titleText.textContent) + 1) % titles.length]);
+});
+let shown = title; // scene of the last part that had steps
 
 parts.forEach((part, p) => {
   const scene = document.createElement("div");

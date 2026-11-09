@@ -30,3 +30,16 @@
   /* ponytail: one filter over the whole scene, in px, so smoke doesn't scale with the screen; move it to per-element if the rehearsal machine stutters */
   filter: url(#smoke);
 }
+
+/* The title before the first step: shown in the base state, a huge outlined wordmark in the same ink line as the scenes. */
+.scene.title { opacity: 1; visibility: visible; }
+.title svg { width: 100%; height: 100%; display: block; }
+.title text {
+  font: 800 360px var(--font);
+  letter-spacing: 0.06em;
+  text-anchor: middle;
+  dominant-baseline: central;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 3;
+}

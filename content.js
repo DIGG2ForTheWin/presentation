@@ -4,7 +4,10 @@ export default {
   // Domibus 5.2.1's own domibus.properties (Payload section) also names 30MB as the size above which database payload storage is no longer recommended.
   sdkLimitMb: 30,
 
-  // How strong the smoke around everything is: 0 = none, 1 = the normal look, 2 = twice as thick.
+  // The big title on screen before the presentation starts: "DIGG" or "DOMIBUS". The T key switches between them live.
+  title: "DIGG",
+
+  // How much smoke there is around everything: 0 = none, 1 = the normal look, 2 = twice as big and thick.
   smoke: 0.5,
 
   // Act 1 captions, one per → press, in order. Keep exactly 15: each one belongs to a step of the animation.
