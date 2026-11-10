@@ -8,7 +8,7 @@ export default {
   title: "DIGG",
 
   // How much smoke there is around everything: 0 = none, 1 = the normal look, 2 = twice as big and thick.
-  smoke: 0.5,
+  smoke: 0.1,
 
   // Act 1 captions, one per → press, in order. Keep exactly 15: each one belongs to a step of the animation.
   // {limit} is replaced with the SDK limit above (e.g. "30 MB").

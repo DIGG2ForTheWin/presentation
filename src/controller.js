@@ -9,7 +9,7 @@
  */
 
 /**
- * Attaches the → / ← handler. The screen starts at step 0, the base state; the first → plays steps[0].
+ * Attaches the → / ← / Home / A handler. The screen starts at step 0, the base state; the first → plays steps[0].
  * @param {Spec[][]} steps The whole story, in order.
  */
 export function start(steps) {
@@ -45,13 +45,36 @@ export function start(steps) {
     });
   }
 
+  // Instant reset to the start, nothing shown on the way: drops every animation, so the base state returns.
+  function reset() {
+    active = null;
+    for (const anims of held.splice(0)) for (const a of anims) a.cancel();
+  }
+
+  // A toggles autoplay: plays each step, holds HOLD ms once it ends, and after the last step resets and starts over.
+  const HOLD = 1500; // tune per room
+  let auto = null;
+  function autoStep() {
+    if (held.length < steps.length) {
+      const anims = forward(steps[held.length]);
+      held.push(anims);
+      play(anims, false);
+    } else reset();
+    autoWait();
+  }
+  const autoWait = () => (auto = setTimeout(active ? autoWait : autoStep, active ? 100 : HOLD));
+
   document.addEventListener("keydown", (e) => {
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    if (e.key.toLowerCase() === "a") {
+      if (auto) auto = clearTimeout(auto);
+      else if (active) autoWait();
+      else autoStep();
+      return;
+    }
     if (e.key === "Home") {
-      // Instant reset to the start, nothing shown on the way: drops every animation, so the base state returns.
       e.preventDefault();
-      active = null;
-      for (const anims of held.splice(0)) for (const a of anims) a.cancel();
+      reset();
       return;
     }
     if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
